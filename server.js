@@ -68,7 +68,24 @@ const handleErr = (err) => {
 //Rendering Pages
 
 //app.get("/", (req, res) => getBlogs("guest", res , '/guest.css'));
-app.get("/dashboard", Auth,(req, res) => res.send('dashboard'));
+app.get("/dashboard", Auth,(req, res) => {
+  const token = req.cookies.jwt;
+  jwt.verify( token, process.env.SECRET, (err,decoded) =>{
+    if(err){
+        console.log(err.message)
+        res.redirect('/login')
+    }else{
+      User.findById(decoded.id,(err,user) => {
+        if(err){
+          res.redirect('/login')
+          console.log(err)
+        }else{
+          res.render('dashboard',{client:user.fullname}) 
+        }
+      })     
+    }
+})
+});
 app.get("/signup", (req, res) => res.render("signup"));
 app.get("/login", (req, res) => res.render("login"));
 
