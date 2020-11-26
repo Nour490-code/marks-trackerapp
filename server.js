@@ -79,7 +79,7 @@ app.get("/dashboard", Auth,(req, res) => {
         if(err){
           res.redirect('/login')
           console.log(err)
-        }else{
+        }else{   
           res.render('dashboard',{client:user.fullname}) 
         }
       })     
